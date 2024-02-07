@@ -1,0 +1,82 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface Task {
+  id: number;
+  title: string;
+}
+
+const apiUrl = 'https://example-api.com/tasks'; // Remplacez par l'URL de votre API
+
+const TodoList: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTask, setNewTask] = useState<string>('');
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(apiUrl);
+      // Convertissez la réponse unique en tableau pour le rendre compatible avec le reste du code
+      setTasks([response.data]); 
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const addTask = async () => {
+    try {
+      const response = await axios.post(apiUrl, { title: newTask });
+      setTasks([...tasks, response.data]);
+      setNewTask('');
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const updateTask = async (id: number, title: string) => {
+    try {
+      await axios.put(`${apiUrl}/${id}`, { title });
+      fetchTasks();
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  const deleteTask = async (id: number) => {
+    try {
+      await axios.delete(`${apiUrl}/${id}`);
+      fetchTasks();
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  return (
+    <div>
+      <h1>ToDo List</h1>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <span>{task.title}</span>
+            <button onClick={() => updateTask(task.id, prompt('Enter new title:', task.title) || task.title)}>Update</button>
+            <button onClick={() => deleteTask(task.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <div>
+        <input
+          type="text"
+          placeholder="New Task"
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+        />
+        <button onClick={addTask}>Add Task</button>
+      </div>
+    </div>
+  );
+};
+
+export default TodoList;
