@@ -4,6 +4,7 @@ import InProgressTasks from "./InProgressTasks";
 import DoneTasks from "./DoneTasks";
 import TasksDeleted from "./TasksDeleted";
 import { FaCirclePlus } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const TaskGrid: React.FC = () => {
   return (
@@ -13,7 +14,9 @@ const TaskGrid: React.FC = () => {
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
+            <Link to="/addtask">
             <div>Add New task</div>
+</Link>
           </div>
         </div>
         <AllTasks />
@@ -23,7 +26,9 @@ const TaskGrid: React.FC = () => {
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
+            <Link to="/addtask">
             <div>Add New task</div>
+</Link>
           </div>
         </div>
         <InProgressTasks />
@@ -33,7 +38,9 @@ const TaskGrid: React.FC = () => {
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
+            <Link to="/addtask">
             <div>Add New task</div>
+</Link>
           </div>
         </div>
         <DoneTasks />
@@ -43,7 +50,9 @@ const TaskGrid: React.FC = () => {
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
+            <Link to="/addtask">
             <div>Add New task</div>
+</Link>
           </div>
         </div>
         <TasksDeleted />
