@@ -1,19 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from "react";
 import Header from "./components/Header";
 import Banner from "./components/Banner";
 import TaskList from "./components/TaskList";
-import AddTask from "./components/AddTask";
+import TaskForm from "./components/TaskForm";
 
 const App: React.FC = () => {
   return (
-    <div className="bg-[#2A2B2F] h-screen text-white">
+    <div className="bg-[#2A2B2F] text-white flex flex-col gap-3">
       <Header />
       <Banner />
-      <Routes>
-        <Route path="/addtask" element={<AddTask />} />
-        <Route path="/" element={<TaskList />} />
-      </Routes>
+      <TaskList />
+      {/* <TaskForm /> */}
     </div>
   );
 };

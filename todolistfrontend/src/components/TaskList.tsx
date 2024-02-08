@@ -4,55 +4,46 @@ import InProgressTasks from "./InProgressTasks";
 import DoneTasks from "./DoneTasks";
 import TasksDeleted from "./TasksDeleted";
 import { FaCirclePlus } from "react-icons/fa6";
-import { Link } from "react-router-dom";
 
-const TaskGrid: React.FC = () => {
+const TaskList: React.FC = () => {
   return (
-    <div className="grid grid-cols-4 gap-4">
-      <div className="border rounded-md flex flex-col p-5 bg-[#24262C]">
+    <div className="grid grid-cols-4 gap-4 px-5">
+      <div className="rounded-lg flex flex-col gap-3 p-5 bg-[#24262C] border">
         <div className="flex items-center justify-between">
-          <div>All tasks(11)</div>
+          <div className="text-[#ffffff6e]">All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
-            <FaCirclePlus />
-            <Link to="/addtask">
+            <FaCirclePlus className="text-[#ffffff6e]" />
             <div>Add New task</div>
-</Link>
           </div>
         </div>
-        <AllTasks />
+          <AllTasks />
       </div>
-      <div className="border rounded-md flex flex-col p-5 bg-[#24262C]">
+      <div className="rounded-lg flex flex-col gap-3 p-5 bg-[#24262C]">
         <div className="flex items-center justify-between">
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
-            <Link to="/addtask">
             <div>Add New task</div>
-</Link>
           </div>
         </div>
         <InProgressTasks />
       </div>
-      <div className="border rounded-md flex flex-col p-5 bg-[#24262C]">
+      <div className="rounded-lg flex flex-col gap-3 p-5 bg-[#24262C]">
         <div className="flex items-center justify-between">
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
-            <Link to="/addtask">
             <div>Add New task</div>
-</Link>
           </div>
         </div>
         <DoneTasks />
       </div>
-      <div className="border rounded-md flex flex-col p-5 bg-[#24262C]">
+      <div className="rounded-lg flex flex-col gap-3 p-5 bg-[#24262C]">
         <div className="flex items-center justify-between">
           <div>All tasks(11)</div>
           <div className="flex gap-2 items-center cursor-pointer">
             <FaCirclePlus />
-            <Link to="/addtask">
             <div>Add New task</div>
-</Link>
           </div>
         </div>
         <TasksDeleted />
@@ -61,4 +52,4 @@ const TaskGrid: React.FC = () => {
   );
 };
 
-export default TaskGrid;
+export default TaskList;

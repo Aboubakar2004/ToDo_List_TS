@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { LiaEdit } from "react-icons/lia";
+import { MdDelete } from "react-icons/md";
+import TaskStep from "./TaskStep";
 
 interface Tasks {
   id: number;
@@ -16,17 +19,39 @@ const AllTasks: React.FC = () => {
       .then((data: Tasks[]) => setTasks(data))
       .catch((error) => console.error("Error fetching tasks:", error));
   }, []);
+
   return (
-    <div className="text-white">
-      <ul className="border rounded-md">
-        {tasks.map((task) => (
-          <li key={task.id} className="border rounded-md">
+    <div className="rounded-md flex flex-col gap-4">
+      {tasks.map((task) => (
+        <ul
+          key={task.id}
+          className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5"
+        >
+          <li>
             <strong>{task.title}</strong>
-            <p>{task.description}</p>
-            <p>Completed: {task.completed ? "Yes" : "No"}</p>
+            <p className="text-[#ffffff6e]">{task.description}</p>
           </li>
-        ))}
-      </ul>
+          <li className="flex flex-col gap-2">
+            <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
+              <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
+            </div>
+            <TaskStep />
+          </li>
+          <li className="flex justify-between">
+            <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
+              06 Jan 2024
+            </div>
+            <div className="flex items-center gap-1 text-2xl">
+              <div className="delete text-red-700 cursor-pointer">
+                <MdDelete />
+              </div>
+              <div className="edit text-green-700 cursor-pointer">
+                <LiaEdit />
+              </div>
+            </div>
+          </li>
+        </ul>
+      ))}
     </div>
   );
 };
