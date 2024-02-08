@@ -2,7 +2,6 @@ import React from "react";
 import Header from "./components/Header";
 import Banner from "./components/Banner";
 import TaskList from "./components/TaskList";
-import TaskForm from "./components/TaskForm";
 
 const App: React.FC = () => {
   return (
@@ -10,7 +9,6 @@ const App: React.FC = () => {
       <Header />
       <Banner />
       <TaskList />
-      {/* <TaskForm /> */}
     </div>
   );
 };
