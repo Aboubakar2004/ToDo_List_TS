@@ -8,12 +8,15 @@ const port = 3001;
 app.use(express.json());
 app.use(cors());
 
-interface Task{
-  id: number,
-  title: string,
-  description: string,
-  completed: boolean,
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  deletedDate?: string;
 }
+
+interface DeletedTask extends Task {}
 
 let tasks: Task[] = [
   {
@@ -40,49 +43,102 @@ let tasks: Task[] = [
     description: "Description de la tache 4",
     completed: false,
   },
-  // {
-  //   id: 5,
-  //   title: "task5",
-  //   description: "Description de la tache 5",
-  //   completed: false,
-  // },
+  {
+    id: 5,
+    title: "task5",
+    description: "Description de la tache 5",
+    completed: false,
+  },
 ];
 
-app.get("/tasks", function (req: any, res: { json: (arg0: Task[]) => void; }) {
+let deletedTasks: DeletedTask[] = [];
+
+app.get("/tasks", function (req: any, res: { json: (arg0: Task[]) => void }) {
   res.json(tasks);
 });
 
-app.get("/tasks/:id", function (req: { params: { id: string; }; }, res: { json: (arg0: Task) => void; status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; }): void; new(): any; }; }; }) {
-  const taskId = parseInt(req.params.id, 10);
-  const task = tasks.find((task) => task.id === taskId);
+app.get(
+  "/tasks/:id",
+  function (
+    req: { params: { id: string } },
+    res: {
+      json: (arg0: Task) => void;
+      status: (arg0: number) => {
+        (): any;
+        new (): any;
+        json: { (arg0: { message: string }): void; new (): any };
+      };
+    }
+  ) {
+    const taskId = parseInt(req.params.id, 10);
+    const task = tasks.find((task) => task.id === taskId);
 
-  if (task) {
-    res.json(task);
-  } else {
-    res.status(404).json({ message: "Tâche non trouvée" });
+    if (task) {
+      res.json(task);
+    } else {
+      res.status(404).json({ message: "Tâche non trouvée" });
+    }
   }
-});
+);
 
-app.post("/tasks", function (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: any): void; new(): any; }; }; }) {
-  const newTask = req.body;
-  newTask.id = tasks.length + 1;
-  tasks.push(newTask);
-  res.status(201).json(newTask);
-});
+app.post(
+  "/tasks",
+  function (
+    req: { body: any },
+    res: {
+      status: (arg0: number) => {
+        (): any;
+        new (): any;
+        json: { (arg0: any): void; new (): any };
+      };
+    }
+  ) {
+    const newTask = req.body;
+    newTask.id = tasks.length + 1;
+    tasks.push(newTask);
+    res.status(201).json(newTask);
+  }
+);
 
-app.put("/tasks/:id", function (req: { params: { id: string; }; body: any; }, res: { json: (arg0: { message: string; }) => void; }) {
-  const taskId = parseInt(req.params.id, 10);
-  const updatedTask = req.body;
-  tasks = tasks.map((task) =>
-    task.id === taskId ? { ...task, ...updatedTask } : task
-  );
-  res.json({ message: "Tâche mise à jour avec succès" });
-});
+app.put(
+  "/tasks/:id",
+  function (
+    req: { params: { id: string }; body: any },
+    res: { json: (arg0: { message: string }) => void }
+  ) {
+    const taskId = parseInt(req.params.id, 10);
+    const updatedTask = req.body;
+    tasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, ...updatedTask } : task
+    );
+    res.json({ message: "Tâche mise à jour avec succès" });
+  }
+);
 
-app.delete("/tasks/:id", function (req: { params: { id: string; }; }, res: { json: (arg0: { message: string; }) => void; }) {
-  const taskId = parseInt(req.params.id, 10);
-  tasks = tasks.filter((task) => task.id !== taskId);
-  res.json({ message: "Tâche supprimée avec succès" });
+app.delete(
+  "/tasks/:id",
+  function (
+    req: { params: { id: string } },
+    res: { json: (arg0: { message: string; deletedDate?: string }) => void }
+  ) {
+    const taskId = parseInt(req.params.id, 10);
+    const deletedTask = tasks.find((task) => task.id === taskId);
+
+    if (deletedTask) {
+      deletedTask.deletedDate = new Date().toLocaleDateString(); 
+      deletedTasks.push(deletedTask);
+    }
+
+    tasks = tasks.filter((task) => task.id !== taskId);
+    res.json({
+      message: "Tâche supprimée avec succès",
+      deletedDate: deletedTask ? deletedTask.deletedDate : undefined,
+    });
+  }
+);
+
+app.get("/deletedTasks", function (req: any, res: { json: (arg0: DeletedTask[]) => void }) {
+  res.json(deletedTasks);
 });
 
 app.listen(port, function () {

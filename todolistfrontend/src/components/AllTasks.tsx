@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { LiaEdit } from "react-icons/lia";
 import { MdDelete } from "react-icons/md";
@@ -19,6 +20,18 @@ const AllTasks: React.FC = () => {
       .then((data: Tasks[]) => setTasks(data))
       .catch((error) => console.error("Error fetching tasks:", error));
   }, []);
+
+  const handleDelete = (taskId: number) => {
+    fetch(`http://localhost:3001/tasks/${taskId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message); // log the deletion message
+        setTasks(tasks.filter((task) => task.id !== taskId));
+      })
+      .catch((error) => console.error("Error deleting task:", error));
+  };
 
   return (
     <div className="rounded-md flex flex-col gap-4">
@@ -42,7 +55,10 @@ const AllTasks: React.FC = () => {
               06 Jan 2024
             </div>
             <div className="flex items-center gap-1 text-2xl">
-              <div className="delete text-red-700 cursor-pointer">
+              <div
+                className="delete text-red-700 cursor-pointer"
+                onClick={() => handleDelete(task.id)}
+              >
                 <MdDelete />
               </div>
               <div className="edit text-green-700 cursor-pointer">

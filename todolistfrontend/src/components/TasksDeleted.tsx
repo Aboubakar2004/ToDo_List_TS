@@ -1,32 +1,51 @@
 import React, { useState, useEffect } from "react";
+import { LiaEdit } from "react-icons/lia";
+import { MdDelete } from "react-icons/md";
 
-interface Tasks {
+interface DeletedTask {
   id: number;
   title: string;
   description: string;
   completed: boolean;
+  deletedDate: string; 
 }
 
 const TasksDeleted: React.FC = () => {
-  const [tasks, setTasks] = useState<Tasks[]>([]);
+  const [deletedTasks, setDeletedTasks] = useState<DeletedTask[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/tasks")
+    fetch("http://localhost:3001/deletedTasks")
       .then((response) => response.json())
-      .then((data: Tasks[]) => setTasks(data))
-      .catch((error) => console.error("Error fetching tasks:", error));
+      .then((data: DeletedTask[]) => setDeletedTasks(data))
+      .catch((error) => console.error("Error fetching deleted tasks:", error));
   }, []);
+
   return (
-    <div className="text-white">
-       <ul className="border rounded-md">
-        {tasks.map((task) => (
-          <li key={task.id} className="border rounded-md">
+    <div className="rounded-md flex flex-col gap-4">
+      {deletedTasks.map((task) => (
+        <ul
+          key={task.id}
+          className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5"
+        >
+          <li>
             <strong>{task.title}</strong>
-            <p>{task.description}</p>
-            <p>Completed: {task.completed ? "Yes" : "No"}</p>
+            <p className="text-[#ffffff6e]">{task.description}</p>
           </li>
-        ))}
-      </ul>
+          <li className="flex flex-col gap-2">
+            <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
+              <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
+            </div>
+          </li>
+          <li className="flex justify-between">
+            <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
+              {task.deletedDate}
+            </div>
+            <div className="flex items-center gap-1 text-l text-red-600">
+              supprimeé
+            </div>
+          </li>
+        </ul>
+      ))}
     </div>
   );
 };
