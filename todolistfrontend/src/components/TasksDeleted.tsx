@@ -41,7 +41,7 @@ const TasksDeleted: React.FC = () => {
               {task.deletedDate}
             </div>
             <div className="flex items-center gap-1 text-l text-red-600">
-              supprimeé
+              Supprimée
             </div>
           </li>
         </ul>

@@ -1,15 +1,17 @@
 import React from "react";
-import Header from "./components/Header";
-import Banner from "./components/Banner";
-import TaskList from "./components/TaskList";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import TaskForm from "./components/TaskForm";
+import AddTask from "./components/AddTask";
+
 
 const App: React.FC = () => {
   return (
-    <div className="bg-[#2A2B2F] text-white flex flex-col gap-3">
-      <Header />
-      <Banner />
-      <TaskList />
-    </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/form" element={<TaskForm />} />
+          <Route path="/addtask" element={<AddTask />} />
+        </Routes>
   );
 };
 

@@ -1,18 +1,21 @@
-
+// AllTasks.tsx
 import React, { useState, useEffect } from "react";
 import { LiaEdit } from "react-icons/lia";
 import { MdDelete } from "react-icons/md";
 import TaskStep from "./TaskStep";
+import DoneTasks from "./DoneTasks"; // Importer DoneTasks
 
 interface Tasks {
   id: number;
   title: string;
   description: string;
   completed: boolean;
+  subTasks: string[]; // Ajouter subTasks à la définition de Tasks
 }
 
 const AllTasks: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks[]>([]);
+  const [doneTasks, setDoneTasks] = useState<Tasks[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/tasks")
@@ -27,7 +30,7 @@ const AllTasks: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.message); // log the deletion message
+        console.log(data.message);
         setTasks(tasks.filter((task) => task.id !== taskId));
       })
       .catch((error) => console.error("Error deleting task:", error));
@@ -36,10 +39,7 @@ const AllTasks: React.FC = () => {
   return (
     <div className="rounded-md flex flex-col gap-4">
       {tasks.map((task) => (
-        <ul
-          key={task.id}
-          className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5"
-        >
+        <ul key={task.id} className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5">
           <li>
             <strong>{task.title}</strong>
             <p className="text-[#ffffff6e]">{task.description}</p>
@@ -48,7 +48,8 @@ const AllTasks: React.FC = () => {
             <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
               <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
             </div>
-            <TaskStep />
+            {/* Passer la prop subTasks à TaskStep */}
+            <TaskStep subTasks={task.subTasks} taskId={task.id} />
           </li>
           <li className="flex justify-between">
             <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
@@ -68,6 +69,8 @@ const AllTasks: React.FC = () => {
           </li>
         </ul>
       ))}
+      {/* Passer la prop doneTasks à DoneTasks */}
+      <DoneTasks doneTasks={doneTasks} />
     </div>
   );
 };
