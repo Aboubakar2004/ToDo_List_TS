@@ -41,7 +41,7 @@ function Signup() {
     setErrors(Validation(values));
     
     if (errors.name === '' && errors.email === '' && errors.password === '') {
-        fetch('http://localhost:8081/signup', {
+        fetch('http://localhost:3001/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,9 +63,9 @@ function Signup() {
 
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
-      <div className="bg-white p-3 rounded w-25">
-        <h2>Sign-Up</h2>
+    <div className="flex justify-content-center align-items-center bg-slate-950 vh-100">
+      <div className="bg-white p-3 rounded w-50">
+        <h2 className="text-center">Sign-Up</h2>
         <form action="" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name">
@@ -77,7 +77,7 @@ function Signup() {
               name="name"
               onChange={handleInput}
               className="form-control rounded-0"/>
-              {errors.name && <span className="text-danger">{errors.name}</span>}
+              {errors.name && <span className="text-red-500">{errors.name}</span>}
             
           </div>
           <div className="mb-3">
@@ -90,7 +90,7 @@ function Signup() {
               name="email"
               onChange={handleInput}
               className="form-control rounded-0"/>
-              {errors.email && <span className="text-danger">{errors.email}</span>}
+              {errors.email && <span className="text-red-500">{errors.email}</span>}
             
           </div>
           <div className="mb-3">
@@ -106,10 +106,13 @@ function Signup() {
               {errors.password && <span className="text-danger">{errors.password}</span>}
            
           </div>
-          <button type="submit" className="btn btn-success w-100 rounded-0">
-            <strong>Sign up</strong>
+
+          <div className="flex justify-center ">
+          <button type="submit" className="bg-blue-600 w-40 h-20 rounded-md text-center mb-3   hover:bg-blue-800">
+            <strong className="text-white">Sign up</strong>
           </button>
-          <p>You are agree to our terms and policies</p>
+          </div>
+          <p className="text-center">You are agree to our terms and policies</p>
           <Link
             to="/"
             className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none"
