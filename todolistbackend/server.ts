@@ -9,20 +9,18 @@ app.use(express.json());
 app.use(cors());
 ////////////////////////////////////////
 
-<<<<<<< Updated upstream
 interface Task{
   id: number,
   title: string,
   description: string,
   completed: boolean,
-=======
 const db = mysql.createConnection({
   host: "localhost",
   user: 'root',
   password: "",
   database: "signup"
 });
-app.post('/signup', (req, res) => {
+app.post('/signup', (req: { body: { name: any; email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
   const sql = "INSERT INTO login (`name`, `email` ,`password`) VALUES (?)";
   const values = [
       req.body.name,
@@ -36,7 +34,7 @@ app.post('/signup', (req, res) => {
       return res.json(data);
   });
 });
-app.post('/', (req, res) => {
+app.post('/', (req: { body: { email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
   const sql = "SELECT * FROM login WHERE `email` = ? AND `password` = ?";
   db.query(sql, [req.body.email, req.body.password], (err: any, data: string | any[]) => {
       if (err) {
@@ -61,7 +59,6 @@ interface Task {
   completed: boolean;
   subTasks: string[];
   deletedDate?: string;
->>>>>>> Stashed changes
 }
 
 let tasks: Task[] = [
@@ -100,7 +97,6 @@ let tasks: Task[] = [
     completed: false,
     subTasks: [],
   },
-<<<<<<< Updated upstream
   // {
   //   id: 5,
   //   title: "task5",
@@ -117,7 +113,6 @@ app.get("/tasks/:id", function (req: { params: { id: string; }; }, res: { json: 
   const taskId = parseInt(req.params.id, 10);
   const task = tasks.find((task) => task.id === taskId);
 
-=======
   {
     id: 5,
     title: "Task 5",
@@ -143,7 +138,6 @@ app.get("/tasks", (req: Request, res: Response) => {
 app.get("/tasks/:id", (req: Request, res: Response) => {
   const taskId = parseInt(req.params.id, 10);
   const task = tasks.find((task) => task.id === taskId);
->>>>>>> Stashed changes
   if (task) {
     res.json(task);
   } else {
@@ -151,7 +145,6 @@ app.get("/tasks/:id", (req: Request, res: Response) => {
   }
 });
 
-<<<<<<< Updated upstream
 app.post("/tasks", function (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: any): void; new(): any; }; }; }) {
   const newTask = req.body;
   newTask.id = tasks.length + 1;
@@ -172,7 +165,6 @@ app.delete("/tasks/:id", function (req: { params: { id: string; }; }, res: { jso
   const taskId = parseInt(req.params.id, 10);
   tasks = tasks.filter((task) => task.id !== taskId);
   res.json({ message: "Tâche supprimée avec succès" });
-=======
 // Ajout d'une nouvelle tâche
 app.post("/tasks", (req: Request, res: Response) => {
   // Assurez-vous que les données envoyées depuis l'application correspondent à la structure attendue
@@ -215,7 +207,6 @@ app.delete("/tasks/:id", (req: Request, res: Response) => {
 // Récupération des tâches supprimées
 app.get("/deletedTasks", (req: Request, res: Response) => {
   res.json(deletedTasks);
->>>>>>> Stashed changes
 });
 
 // Démarrage du serveur
