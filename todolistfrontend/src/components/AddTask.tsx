@@ -108,7 +108,7 @@ function List(props: ListProps) {
               <li key={task.id} className="my-4">
                 <div className="bg-gray-700 p-4 rounded-md">
                   <h1 className="text-xl font-bold mb-2 text-white">{task.title}</h1>
-                  <TaskStep subTasks={task.subTasks} taskId={task.id} />
+                  <TaskStep subTasks={task.subTasks} taskId={task.id} title={""} />
                   <button onClick={() => RemoveTask(task.id)} className="btn-danger mt-2">
                     Supprimer la tâche
                   </button>

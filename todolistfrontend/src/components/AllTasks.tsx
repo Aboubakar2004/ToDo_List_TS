@@ -48,8 +48,7 @@ const AllTasks: React.FC = () => {
             <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
               <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
             </div>
-            {/* Passer la prop subTasks à TaskStep */}
-            <TaskStep subTasks={task.subTasks} taskId={task.id} />
+            <TaskStep subTasks={task.subTasks} taskId={task.id} title={task.title} />
           </li>
           <li className="flex justify-between">
             <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
@@ -69,8 +68,6 @@ const AllTasks: React.FC = () => {
           </li>
         </ul>
       ))}
-      {/* Passer la prop doneTasks à DoneTasks */}
-      <DoneTasks doneTasks={doneTasks} />
     </div>
   );
 };

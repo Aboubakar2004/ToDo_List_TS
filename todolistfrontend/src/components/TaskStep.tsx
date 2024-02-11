@@ -1,13 +1,14 @@
-// TaskStep.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TfiMenuAlt } from "react-icons/tfi";
+import { Link } from "react-router-dom";
 
 interface TaskStepProps {
   subTasks: string[];
-  taskId: number; // Ajoutez cette ligne pour définir taskId
+  taskId: number;
+  title: string;
 }
 
-const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId }) => {
+const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId, title }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [count, setCount] = useState(0);
   const [agreement, setAgreement] = useState(false);
@@ -16,37 +17,52 @@ const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId }) => {
     setIsVisible((prevVisibility) => !prevVisibility);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setAgreement(event.target.checked);
-      setCount(count + 1);
-      doneTask()
-    } else {
-      setAgreement(event.target.checked);
-      setCount(count - 1);
-    }
+  const updateAgreement = () => {
+    setAgreement(count === subTasks.length);
   };
 
-  const doneTask = () => {
-    if (count === subTasks.length) {
-      // Mettez à jour la tâche pour la marquer comme terminée
-      fetch(`http://localhost:3001/tasks/${taskId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ completed: true }),
-      })
-        .then(response => response.json())
-        .then(updatedTask => {
-          // Gérer la réponse si nécessaire
-          console.log('Task marked as completed:', updatedTask);
-        })
-        .catch(error => {
-          console.error('Error updating task:', error);
-        });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setCount(count + 1);
+    } else {
+      setCount(count - 1);
     }
+
+    updateAgreement();
   };
+
+  const handleContinue = () => {
+    fetch("http://localhost:3001/completedTasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: taskId,
+        title: title,
+        description: "Task Description",
+        completed: false,
+        subTasks: subTasks || [],
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Task completed successfully", data);
+        
+        // Mettez à jour l'état local en supprimant la tâche complétée
+        // Cela dépend de la structure exacte de votre état local
+        // Vous pouvez utiliser setState ou une fonction similaire ici
+        // par exemple, setTasks(updatedTasks);
+        
+        // Redirigez vers la route souhaitée
+        window.location.href = "/";
+      })
+      .catch((error) => console.error("Error completing task:", error));
+  };
+
+  useEffect(() => {
+    updateAgreement();
+  }, [count, subTasks.length]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -76,6 +92,17 @@ const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId }) => {
           ))}
         </div>
       )}
+      <button
+        disabled={!agreement}
+        onClick={handleContinue}
+        className={`py-2 px-4 rounded ${
+          agreement
+            ? "bg-green-500 text-white"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+      >
+        Continuer
+      </button>
     </div>
   );
 };

@@ -50,7 +50,7 @@ const InProgressTasks: React.FC = () => {
         <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
       </div>
       {task.subTasks && (
-        <TaskStep subTasks={task.subTasks} taskId={task.id} /> // Ajoutez taskId ici
+        <TaskStep subTasks={task.subTasks} taskId={task.id} title={task.title} /> // Ajoutez taskId ici
       )}
     </li>
     <li className="flex justify-between">

@@ -10,6 +10,8 @@ interface DeletedTask {
   deletedDate: string; 
 }
 
+
+
 const TasksDeleted: React.FC = () => {
   const [deletedTasks, setDeletedTasks] = useState<DeletedTask[]>([]);
 
