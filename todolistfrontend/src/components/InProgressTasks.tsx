@@ -46,9 +46,6 @@ const InProgressTasks: React.FC = () => {
       <p className="text-[#ffffff6e]">{task.description}</p>
     </li>
     <li className="flex flex-col gap-2">
-      <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
-        <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
-      </div>
       {task.subTasks && (
         <TaskStep subTasks={task.subTasks} taskId={task.id} title={task.title} /> // Ajoutez taskId ici
       )}

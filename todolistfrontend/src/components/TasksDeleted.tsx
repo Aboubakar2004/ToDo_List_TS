@@ -34,9 +34,6 @@ const TasksDeleted: React.FC = () => {
             <p className="text-[#ffffff6e]">{task.description}</p>
           </li>
           <li className="flex flex-col gap-2">
-            <div className="progress_bar h-1 bg-[#ffffff10] rounded-full">
-              <div className="bg-[#FFA048] w-7 h-full rounded-full"></div>
-            </div>
           </li>
           <li className="flex justify-between">
             <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
