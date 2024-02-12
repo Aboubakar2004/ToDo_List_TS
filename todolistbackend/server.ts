@@ -9,13 +9,25 @@ app.use(express.json());
 app.use(cors());
 ////////////////////////////////////////
 
+<<<<<<< HEAD
+=======
+interface Task{
+  id: number,
+  title: string,
+  description: string,
+  completed: boolean,
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
 const db = mysql.createConnection({
   host: "localhost",
   user: 'root',
   password: "",
   database: "signup"
 });
+<<<<<<< HEAD
 app.post('/signup', (req, res) => {
+=======
+app.post('/signup', (req: { body: { name: any; email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
   const sql = "INSERT INTO login (`name`, `email` ,`password`) VALUES (?)";
   const values = [
       req.body.name,
@@ -29,7 +41,11 @@ app.post('/signup', (req, res) => {
       return res.json(data);
   });
 });
+<<<<<<< HEAD
 app.post('/', (req, res) => {
+=======
+app.post('/', (req: { body: { email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
   const sql = "SELECT * FROM login WHERE `email` = ? AND `password` = ?";
   db.query(sql, [req.body.email, req.body.password], (err: any, data: string | any[]) => {
       if (err) {
@@ -91,7 +107,38 @@ let tasks: Task[] = [
     description: "Description of Task 4",
     completed: false,
     subTasks: [],
+<<<<<<< HEAD
   },
+  {
+    id: 5,
+    title: "Task 5",
+    description: "Description of Task 5",
+    completed: false,
+    subTasks: ["Subtask 5.1", "Subtask 5.2", "Subtask 5.3", "Subtask 5.4"],
+=======
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
+  },
+];
+
+let deletedTasks: Task[] = [];
+
+// Récupération de toutes les tâches
+app.get("/tasks", (req: Request, res: Response) => {
+  // Ajout de la propriété subTasksCount dans chaque tâche
+  const tasksWithSubTasksCount = tasks.map((task) => ({
+    ...task,
+    subTasksCount: task.subTasks ? task.subTasks.length : 0,
+  }));
+  res.json(tasksWithSubTasksCount);
+});
+
+// Récupération d'une tâche par son ID
+app.get("/tasks/:id", (req: Request, res: Response) => {
+  const taskId = parseInt(req.params.id, 10);
+  const task = tasks.find((task) => task.id === taskId);
+<<<<<<< HEAD
+=======
+
   {
     id: 5,
     title: "Task 5",
@@ -117,6 +164,7 @@ app.get("/tasks", (req: Request, res: Response) => {
 app.get("/tasks/:id", (req: Request, res: Response) => {
   const taskId = parseInt(req.params.id, 10);
   const task = tasks.find((task) => task.id === taskId);
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
   if (task) {
     res.json(task);
   } else {
@@ -124,6 +172,53 @@ app.get("/tasks/:id", (req: Request, res: Response) => {
   }
 });
 
+// Ajout d'une nouvelle tâche
+app.post("/tasks", (req: Request, res: Response) => {
+  // Assurez-vous que les données envoyées depuis l'application correspondent à la structure attendue
+  const newTask: Task = {
+    id: tasks.length + 1,
+    title: req.body.title,
+    description: req.body.description,
+    completed: req.body.completed || false,
+    subTasks: req.body.subTasks || [],
+  };
+  tasks.push(newTask);
+  res.status(201).json(newTask);
+});
+
+// Mise à jour d'une tâche par son ID
+app.put("/tasks/:id", (req: Request, res: Response) => {
+  const taskId = parseInt(req.params.id, 10);
+  const updatedTask = req.body;
+  tasks = tasks.map((task) =>
+    task.id === taskId ? { ...task, ...updatedTask } : task
+  );
+  res.json({ message: "Tâche mise à jour avec succès" });
+});
+
+// Suppression d'une tâche par son ID
+app.delete("/tasks/:id", (req: Request, res: Response) => {
+  const taskId = parseInt(req.params.id, 10);
+  const deletedTask = tasks.find((task) => task.id === taskId);
+  if (deletedTask) {
+    deletedTask.deletedDate = new Date().toLocaleDateString();
+    deletedTasks.push(deletedTask);
+  }
+  tasks = tasks.filter((task) => task.id !== taskId);
+<<<<<<< HEAD
+  res.json({
+    message: "Tâche supprimée avec succès",
+    deletedDate: deletedTask ? deletedTask.deletedDate : undefined,
+  });
+});
+
+// Récupération des tâches supprimées
+app.get("/deletedTasks", (req: Request, res: Response) => {
+  res.json(deletedTasks);
+});
+
+=======
+  res.json({ message: "Tâche supprimée avec succès" });
 // Ajout d'une nouvelle tâche
 app.post("/tasks", (req: Request, res: Response) => {
   // Assurez-vous que les données envoyées depuis l'application correspondent à la structure attendue
@@ -168,6 +263,7 @@ app.get("/deletedTasks", (req: Request, res: Response) => {
   res.json(deletedTasks);
 });
 
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
 // Démarrage du serveur
 app.listen(port, () => {
   console.log(`Le serveur écoute sur le port ${port}`);

@@ -41,6 +41,7 @@ app.post('/', (req, res) => {
         if (data.length > 0) {
             return res.json("Success");
         }
+<<<<<<< HEAD
         else {
             return res.json("Failed");
         }
@@ -150,3 +151,12 @@ app.get("/deletedTasks", (req, res) => {
 app.listen(port, () => {
     console.log(`Le serveur écoute sur le port ${port}`);
 });
+=======
+        
+    })
+})
+
+app.listen(8081 ,()=>{
+    console.log('Listening 8081');
+})
+>>>>>>> 9315b5481933fd9a31882d9c7aee99ad26904585
