@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TfiMenuAlt } from "react-icons/tfi";
-import { Link } from "react-router-dom";
+
 
 interface TaskStepProps {
   subTasks: string[];
@@ -8,13 +8,34 @@ interface TaskStepProps {
   title: string;
 }
 
+interface Tasks {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  subTasks?: string[]; 
+}
 const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId, title }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [count, setCount] = useState(0);
   const [agreement, setAgreement] = useState(false);
+  const [tasks, setTasks] = useState<Tasks[]>([]);
+
 
   const toggleVisibility = () => {
     setIsVisible((prevVisibility) => !prevVisibility);
+  };
+
+  const handleDelete = (taskId: number) => {
+    fetch(`http://localhost:3001/tasks/${taskId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message); // log the deletion message
+        setTasks(tasks.filter((task) => task.id !== taskId));
+      })
+      .catch((error) => console.error("Error deleting task:", error));
   };
 
   const updateAgreement = () => {
@@ -48,13 +69,6 @@ const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId, title }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Task completed successfully", data);
-        
-        // Mettez à jour l'état local en supprimant la tâche complétée
-        // Cela dépend de la structure exacte de votre état local
-        // Vous pouvez utiliser setState ou une fonction similaire ici
-        // par exemple, setTasks(updatedTasks);
-        
-        // Redirigez vers la route souhaitée
         window.location.href = "/";
       })
       .catch((error) => console.error("Error completing task:", error));
@@ -92,17 +106,21 @@ const TaskStep: React.FC<TaskStepProps> = ({ subTasks, taskId, title }) => {
           ))}
         </div>
       )}
-      <button
-        disabled={!agreement}
-        onClick={handleContinue}
-        className={`py-2 px-4 rounded ${
-          agreement
-            ? "bg-green-500 text-white"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
-      >
-        Continuer
-      </button>
+<button
+  disabled={!agreement}
+  onClick={() => {
+    handleContinue();
+    handleDelete(taskId);
+  }}
+  className={`py-2 px-4 rounded ${
+    agreement
+      ? "bg-green-500 text-white"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+  }`}
+>
+  Continuer
+</button>
+
     </div>
   );
 };
