@@ -4,6 +4,7 @@ import { LiaEdit } from "react-icons/lia";
 import { MdDelete } from "react-icons/md";
 import TaskStep from "./TaskStep";
 import DoneTasks from "./DoneTasks"; // Importer DoneTasks
+import { Link } from "react-router-dom";
 
 interface Tasks {
   id: number;
@@ -39,13 +40,20 @@ const AllTasks: React.FC = () => {
   return (
     <div className="rounded-md flex flex-col gap-4">
       {tasks.map((task) => (
-        <ul key={task.id} className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5">
+        <ul
+          key={task.id}
+          className="flex flex-col bg-[#292B31] rounded-md p-3 gap-5"
+        >
           <li>
             <strong>{task.title}</strong>
             <p className="text-[#ffffff6e]">{task.description}</p>
           </li>
           <li className="flex flex-col gap-2">
-            <TaskStep subTasks={task.subTasks} taskId={task.id} title={task.title} />
+            <TaskStep
+              subTasks={task.subTasks}
+              taskId={task.id}
+              title={task.title}
+            />
           </li>
           <li className="flex justify-between">
             <div className="bg-[#ffffff06] rounded-full px-3 py-1 text-[#989CAA] w-28 grid place-items-center">
@@ -58,8 +66,10 @@ const AllTasks: React.FC = () => {
               >
                 <MdDelete />
               </div>
-              <div className="edit text-green-700 cursor-pointer">
-                <LiaEdit />
+              <div className="edit text-green-700 cursor-pointer flex">
+                <Link to={`/update/${task.id}`}>
+                  <LiaEdit />
+                </Link>
               </div>
             </div>
           </li>

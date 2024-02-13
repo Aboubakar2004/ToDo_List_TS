@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TaskStep from "./TaskStep";
-import Banner from "./Banner";
 
 interface ListProps {
   task?: {
@@ -14,21 +13,30 @@ interface ListProps {
 function List(props: ListProps) {
   const [task, setTask] = useState<string>("");
   const [click, setClick] = useState<boolean>(false);
-  const [tasklist, setTasklist] = useState<{ id: number; title: string; subTasks: string[] }[]>([]);
+  const [tasklist, setTasklist] = useState<
+    { id: number; title: string; subTasks: string[] }[]
+  >([]);
   const [count, setCount] = useState<number>(0);
-  const [newFields, setNewFields] = useState<{ id: number; value: string }[]>([]);
-  
+  const [newFields, setNewFields] = useState<{ id: number; value: string }[]>(
+    []
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3001/tasks")
       .then((response) => response.json())
       .then((data) => setTasklist(data))
-      .catch((error) => console.error("Erreur lors de la récupération des tâches :", error));
+      .catch((error) =>
+        console.error("Erreur lors de la récupération des tâches :", error)
+      );
   }, []);
 
   function handleClick(): void {
-    const newTask = { title: task, subTasks: newFields.map((field) => field.value) };
+    const newTask = {
+      title: task,
+      subTasks: newFields.map((field) => field.value),
+    };
 
     fetch("http://localhost:3001/tasks", {
       method: "POST",
@@ -43,9 +51,11 @@ function List(props: ListProps) {
         setTask("");
         setNewFields([]);
         setClick(true);
-        navigate("/");
+        navigate("/home");
       })
-      .catch((error) => console.error("Erreur lors de l'ajout de la tâche :", error));
+      .catch((error) =>
+        console.error("Erreur lors de l'ajout de la tâche :", error)
+      );
   }
 
   function RemoveTask(id: number): void {
@@ -56,11 +66,16 @@ function List(props: ListProps) {
         if (response.ok) {
           setTasklist(tasklist.filter((task) => task.id !== id));
         } else {
-          console.error("Erreur lors de la suppression de la tâche côté serveur");
+          console.error(
+            "Erreur lors de la suppression de la tâche côté serveur"
+          );
         }
       })
       .catch((error) => {
-        console.error("Erreur réseau lors de la suppression de la tâche :", error);
+        console.error(
+          "Erreur réseau lors de la suppression de la tâche :",
+          error
+        );
       });
   }
 
@@ -77,39 +92,79 @@ function List(props: ListProps) {
   }
 
   return (
-    <div className="container mx-auto mt-8">
-      <div className="max-w-2xl mx-auto p-6 bg-gray-800 rounded-md">
-        <input
-          placeholder="Entrez une tâche"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-          className="w-full p-2 mb-4 text-black bg-gray-200 rounded-md"
-        />
-        <div className="space-x-4">
-          <button onClick={handleClick} className="btn-primary">
-            Ajouter
-          </button>
-          <button onClick={addField} className="btn-secondary">
-            Ajouter une sous-tâche
-          </button>
-          {newFields.map((field) => (
+    <div className="container h-screen bg-[#2A2B2F] grid items-center">
+      <div className="max-w-2xl mx-auto p-6 border-2 rounded-md flex flex-col gap-4 flex-1">
+        <div className="flex gap-5">
+          <label className="text-white block text-sm font-medium w-28">
+            Titre
+          </label>
+          <input
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            className="w-full border focus:outline-none text-black px-2 py-1"
+            type="text"
+            placeholder="Titre de la tâche"
+          />
+        </div>
+        <div className="flex gap-5">
+          <label className="text-white block text-sm font-medium w-28">
+            Description
+          </label>
+          <textarea
+            className="w-full border focus:outline-none text-black px-2 py-1 resize-none"
+            placeholder="(facultatif)"
+            rows={4}
+          />
+        </div>
+        {newFields.map((field) => (
+          <div className="flex gap-5">
+            <label className="text-white block text-sm font-medium w-28">
+              Sous-tâche
+            </label>
             <input
               key={field.id}
-              placeholder="Ajouter une sous-tâche"
               value={field.value}
               onChange={(e) => handleChangeLowTask(field.id, e.target.value)}
-              className="w-full p-2 mb-2 text-black bg-gray-200 rounded-md"
+              placeholder=""
+              className="w-full border focus:outline-none text-black px-2 py-1"
+              type="text"
             />
-          ))}
+          </div>
+        ))}
+        <div className="flex items-center gap-4">
+          <div>
+            <button
+              onClick={addField}
+              className="bg-blue-500 border border-blue-500 text-white py-2 px-4"
+            >
+              Ajouter une sous-tâche
+            </button>
+          </div>
+          <div className="flex gap-4 text-white">
+            <button
+              onClick={handleClick}
+              className="bg-blue-500 py-2 px-4 flex-1"
+            >
+              Ajouter
+            </button>
+            <button className="bg-transparent border py-2 px-4 flex-1">
+              Annuler
+            </button>
+          </div>
         </div>
         {click && (
-          <ul>
+          <ul className="mt-4">
             {tasklist.map((task) => (
               <li key={task.id} className="my-4">
                 <div className="bg-gray-700 p-4 rounded-md">
-                  <h1 className="text-xl font-bold mb-2 text-white">{task.title}</h1>
+                  <h1 className="text-xl font-bold mb-2 text-white">
+                    {task.title}
+                  </h1>
                   <TaskStep subTasks={task.subTasks} taskId={task.id} title={""} />
-                  <button onClick={() => RemoveTask(task.id)} className="btn-danger mt-2">
+                  <button
+                    onClick={() => RemoveTask(task.id)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
                     Supprimer la tâche
                   </button>
                 </div>

@@ -1,12 +1,51 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+const mysql = require('mysql');
+
 
 const app = express();
 const port = 3001;
 
 app.use(express.json());
 app.use(cors());
+
+const db = mysql.createConnection({
+  host: "localhost",
+  user: 'root',
+  password: "",
+  database: "signup"
+});
+
+app.post('/signup', (req: { body: { name: any; email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
+  const sql = "INSERT INTO login (`name`, `email` ,`password`) VALUES (?)";
+  const values = [
+      req.body.name,
+      req.body.email,
+      req.body.password
+  ];
+  db.query(sql, [values], (err: any, data: any) => {
+      if (err) {
+          return res.json("Error");
+      }
+      return res.json(data);
+  });
+});
+
+app.post('/login', (req: { body: { email: any; password: any; }; }, res: { json: (arg0: string) => any; }) => {
+  const sql = "SELECT * FROM login WHERE `email` = ? AND `password` = ?";
+  db.query(sql, [req.body.email, req.body.password], (err: any, data: string | any[]) => {
+      if (err) {
+          return res.json("Error");
+      }
+      if (data.length > 0) {
+          return res.json("Success");
+      } else {
+          return res.json("Failed");
+      }
+  });
+});
+
 
 interface Task {
   id: number;
