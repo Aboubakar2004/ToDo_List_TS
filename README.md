@@ -16,19 +16,12 @@ To Do List est une application de gestion de tâches qui utilise les opérations
     ```bash
     $ cd todolistbackend
     $ npm install
-    $ npm install mysql
-    $ npm install express
-    $ npm install cors
-    $ npm install body-parser
     ```
 
 3. **Installation du Frontend:**
 
     ```bash
     $ cd todolistfrontend
-    $ npm install react-icons --save
-    $ npm install react-router-dom
-    $ npm install
     ```
 
 4. **Configuration de la base de données:**
